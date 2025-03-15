@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import * as Colors from '../consts/Colors';
+
 export default class GameBackground extends Phaser.Scene {
 
     preload() {
@@ -12,8 +14,8 @@ export default class GameBackground extends Phaser.Scene {
             400, 250, 
             0, 0,
             0, 800,
-            0xffffff, 1);
-        this.add.circle(400, 300, 50, 0xffffff);
+            Colors.white, 1);
+        this.add.circle(400, 300, 50, Colors.white);
        
     }  
 } 

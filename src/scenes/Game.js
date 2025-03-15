@@ -1,15 +1,13 @@
 import Phaser from "phaser";
 import { GameBackground } from "../consts/SceneKeys";
+import * as Colors from "../consts/Colors";
 
 class Game extends Phaser.Scene {
 
     init() {
         this.paddleRightVelocity = new Phaser.Math.Vector2(0, 0);
-
         this.leftScore = 0;
         this.rightScore = 0;
-        
-        
     }
 
     preload() {
@@ -17,7 +15,6 @@ class Game extends Phaser.Scene {
     }
 
     create() {
-
 
         this.scene.run(GameBackground);
         this.scene.sendToBack(GameBackground);
@@ -34,14 +31,14 @@ class Game extends Phaser.Scene {
         this.physics.add.existing(this.paddleLeft, true);
         this.paddleLeft.body.setBounce(1, 1);
         this.paddleLeft.body.setImmovable(true);
-        this.paddleLeft.fillColor = 0xffffff;
+        this.paddleLeft.fillColor = Colors.white;
         
         this.paddleRight = this.add.rectangle(750, 300, 20, 100, 0x000000, 1); // Changed color to black
         this.physics.add.existing(this.paddleRight);
         this.physics.add.collider(this.ball, this.paddleRight);
         this.paddleRight.body.setBounce(1, 1);
         this.paddleRight.body.setImmovable(true);
-        this.paddleRight.fillColor = 0xffffff;
+        this.paddleRight.fillColor = Colors.white;
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -52,6 +49,15 @@ class Game extends Phaser.Scene {
     }
 
     update() {
+        // Player
+        this.processPlayerInput();
+        // AI
+        this.updateAI();
+        //Score
+        this.checkScore();
+    }
+
+    processPlayerInput() {
         if (this.cursors.up.isDown) {
             this.paddleLeft.body.setVelocityY(-200);
         } else if (this.cursors.down.isDown) {
@@ -59,55 +65,49 @@ class Game extends Phaser.Scene {
         } else {
             this.paddleLeft.body.setVelocityY(0);
         }
+    }
 
-        const diff = this.ball.y - this.paddleRight.y;
-
-        //right padel speed -200, 200
-        if (diff<0) {
-            this.paddleRight.body.setVelocityY(-200);
-        }
-
-        else if (diff>0) {
-            this.paddleRight.body.setVelocityY(200);
-        }   
-
-        else {
-            this.paddleRight.body.setVelocityY(0);
-        }
-
+    checkScore() {
         if (this.ball.x < -30 ) {
-               this.resetBall();
-               this.rightScorePoint();
+            this.resetBall();
+            this.rightScorePoint();
         } 
-               
+            
         else if (this.ball.x > 830) {
             this.resetBall();   
             this.leftScorePoint(); 
         }
-
-        }
-
-        leftScorePoint() {
-            this.leftScore++;
-            this.leftScoreLabel.text = this.leftScore.toString();
-        }
-
-        rightScorePoint() {
-            this.rightScore++;
-            this.rightScoreLabel.text = this.rightScore.toString();
-        }
-            
-        resetBall() {
-            this.ball.setPosition(400, 300);
-            const angle = Phaser.Math.Between(0, 360);
-            const vec = this.physics.velocityFromAngle(angle, 300);
-            this.ball.body.setVelocity(vec.x, vec.y);
-        }
-
-
     }
 
-   
+    updateAI() {
+        const diff = this.ball.y - this.paddleRight.y;
+        //right padel speed -200, 200
+        if (diff<0) {
+            this.paddleRight.body.setVelocityY(-200);
+        }
+        else if (diff>0) {
+            this.paddleRight.body.setVelocityY(200);
+        }    
+        else {
+            this.paddleRight.body.setVelocityY(0);
+        }
+    }
 
+    leftScorePoint() {
+        this.leftScore++;
+        this.leftScoreLabel.text = this.leftScore.toString();
+    }
 
+    rightScorePoint() {
+        this.rightScore++;
+        this.rightScoreLabel.text = this.rightScore.toString();
+    }
+            
+    resetBall() {
+        this.ball.setPosition(400, 300);
+        const angle = Phaser.Math.Between(0, 360);
+        const vec = this.physics.velocityFromAngle(angle, 300);
+        this.ball.body.setVelocity(vec.x, vec.y);
+    }
+}
 export default Game;
