@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { Game } from "../consts/SceneKeys";
+import { Pong } from "../consts/SceneKeys";
 
 
 
@@ -30,7 +30,7 @@ export default class TitleScreen extends Phaser.Scene {
 
         //STARTS GAME WHEN SPACE IS PRESSED
         this.input.keyboard.once("keydown-SPACE", () => {
-            this.scene.start(Game);
+            this.scene.start(Pong);
         });
 
     }

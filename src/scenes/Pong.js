@@ -1,13 +1,17 @@
 import Phaser from "phaser";
-import { GameBackground } from "../consts/SceneKeys";
+import { PongBackground } from "../consts/SceneKeys";
 import * as Colors from "../consts/Colors";
+import { LostPong } from "../consts/SceneKeys";
+import { WonPong } from "../consts/SceneKeys";
 
-class Game extends Phaser.Scene {
+
+class Pong extends Phaser.Scene {
 
     init() {
         this.paddleRightVelocity = new Phaser.Math.Vector2(0, 0);
         this.leftScore = 0;
         this.rightScore = 0;
+        this.paused = false;
     }
 
     preload() {
@@ -16,8 +20,8 @@ class Game extends Phaser.Scene {
 
     create() {
 
-        this.scene.run(GameBackground);
-        this.scene.sendToBack(GameBackground);
+        this.scene.run(PongBackground);
+        this.scene.sendToBack(PongBackground);
         this.physics.world.setBounds(-100, 0, 1000, 600);
         this.ball = this.add.circle(400, 300, 10, 0x00ff00);
         this.physics.add.existing(this.ball);
@@ -55,6 +59,11 @@ class Game extends Phaser.Scene {
     }
 
     update() {
+        
+        //early out
+        if (this.paused) {
+            return;
+        }
         // Player
         this.processPlayerInput();
         // AI
@@ -78,10 +87,26 @@ class Game extends Phaser.Scene {
             this.resetBall();
             this.rightScorePoint();
         } 
-            
         else if (this.ball.x > 830) {
             this.resetBall();   
             this.leftScorePoint(); 
+        }
+    
+        const maxScore = 1;
+    
+        if (this.leftScore >= maxScore) {
+            console.log("Tom won!!");
+            this.paused = true;
+            this.scene.stop(PongBackground);
+            this.scene.stop(Pong);
+            this.scene.run(WonPong);
+        }
+        else if (this.rightScore >= maxScore) {
+            console.log("Tom lost!!");
+            this.paused = true;
+            this.scene.stop(PongBackground);
+            this.scene.stop(Pong);
+            this.scene.run(LostPong);
         }
     }
 
@@ -89,10 +114,10 @@ class Game extends Phaser.Scene {
         const diff = this.ball.y - this.paddleRight.y;
         //right padel speed -200, 200
         if (diff<0) {
-            this.paddleRight.body.setVelocityY(-200);
+            this.paddleRight.body.setVelocityY(-20);
         }
         else if (diff>0) {
-            this.paddleRight.body.setVelocityY(200);
+            this.paddleRight.body.setVelocityY(20);
         }    
         else {
             this.paddleRight.body.setVelocityY(0);
@@ -116,4 +141,4 @@ class Game extends Phaser.Scene {
         this.ball.body.setVelocity(vec.x, vec.y);
     }
 }
-export default Game;
+export default Pong;

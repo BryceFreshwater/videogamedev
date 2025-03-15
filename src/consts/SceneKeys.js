@@ -1,4 +1,6 @@
 const TitleScreen = "TitleScreen";
-const Game = "Game";
-const GameBackground = "GameBackground";
-export { Game, GameBackground, TitleScreen };
+const Pong = "Pong";
+const PongBackground = "PongBackground";
+const LostPong = "LostPong";
+const WonPong = "WonPong";
+export { Pong, PongBackground, TitleScreen, LostPong, WonPong };
