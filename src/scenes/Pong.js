@@ -3,6 +3,7 @@ import { PongBackground } from "../consts/SceneKeys";
 import * as Colors from "../consts/Colors";
 import { LostPong } from "../consts/SceneKeys";
 import { WonPong } from "../consts/SceneKeys";
+import StatsManager from "../utils/StatsManager";
 
 
 class Pong extends Phaser.Scene {
@@ -69,7 +70,7 @@ class Pong extends Phaser.Scene {
         // AI
         this.updateAI();
         //Score
-        this.checkScore();
+        this.checkScore(StatsManager);
     }
 
     processPlayerInput() {
@@ -96,6 +97,7 @@ class Pong extends Phaser.Scene {
     
         if (this.leftScore >= maxScore) {
             console.log("Tom won!!");
+            
             this.paused = true;
             this.scene.stop(PongBackground);
             this.scene.stop(Pong);
@@ -103,7 +105,9 @@ class Pong extends Phaser.Scene {
         }
         else if (this.rightScore >= maxScore) {
             console.log("Tom lost!!");
+            
             this.paused = true;
+            
             this.scene.stop(PongBackground);
             this.scene.stop(Pong);
             this.scene.run(LostPong);

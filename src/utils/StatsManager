@@ -1,0 +1,42 @@
+const StatsManager = {
+    mentalPoints: 1,
+    leftScore: 0,
+    rightScore: 0,
+    wins: 0,
+    losses: 0,
+
+    incrementMP() {
+        this.mentalPoints++;
+        console.log("MP: " + this.mentalPoints);
+    },
+
+    decrementMP() {
+        this.mentalPoints--;
+
+        if (this.mentalPoints < 0) {
+            console.log("Game Over");
+        } else {
+            console.log("MP: " + this.mentalPoints);
+        }
+    },
+
+    resetScores() {
+        this.leftScore = 0;
+        this.rightScore = 0;
+    },
+
+    incrementWins() {
+        this.wins++;
+    },
+
+    incrementLosses() {
+        this.losses++;
+    },
+
+  
+
+    // more functions to be added
+    // add more functions to manage stats
+};
+
+export default StatsManager;
